@@ -9,6 +9,10 @@ Aqui, você não adquire apenas produtos, mas também tem a oportunidade de cont
 
 🌍 Consuma de forma consciente.
 
+Membros do grupo
+Alexandre Freitas Silva RM:566278
+Artur Distrutti RM:561319
+Felipe Rodrigues RM:562482
 
 
 
