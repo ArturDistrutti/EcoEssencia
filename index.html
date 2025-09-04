@@ -1,13 +1,261 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        .cart-item:hover {
+            background-color: #e2e8f0;
+        }
+        .scrollable-cart {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-add {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn-add:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: scale(105%);
+        }
+        .cart-header {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+        }
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+        }
+        .remove-btn {
+            color: #dc2626;
+        }
+        .remove-btn:hover {
+            color: #b91c1c;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col" onload="carregarCarrinho()">
+    <header class="bg-white shadow-md py-4 px-6">
+        <h1 class="text-2xl font-bold text-gray-800">Loja Virtual Elegante</h1>
+        <p class="text-gray-600 mt-1">Descubra produtos incríveis e adicione ao seu carrinho</p>
+    </header>
+
+    <main class="flex-1 container mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Produto 1 -->
+            <div class="product-card bg-white rounded-lg shadow-md p-6 fade-in">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/42976ddf-2df1-4d8f-8102-52e8b8cd624e.png" alt="Elegant smartphone with sleek black design, displaying bright screen and minimalistic back camera in modern urban environment with soft lighting and subtle reflections of city lights" class="w-full h-48 object-cover rounded-t-lg mb-4">
+                <h3 class="text-xl font-semibold mb-2">Smartphone Elegante</h3>
+                <p class="text-gray-600 mb-4">Um smartphone moderno com câmera de alta qualidade e design fino.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-2xl font-bold text-green-600">R$ 1.500,00</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Smartphone Elegante', 1500, 'https://placehold.co/100x100')">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <!-- Produto 2 -->
+            <div class="product-card bg-white rounded-lg shadow-md p-6 fade-in">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/da5d9e7f-b803-48bc-99fd-5b7d19dd2cfe.png" alt="Beautiful leather handbag with golden accents, structured flap closure, and intricate stitching placed on a marble table with scattered fresh roses and natural window light creating warm shadows" class="w-full h-48 object-cover rounded-t-lg mb-4">
+                <h3 class="text-xl font-semibold mb-2">Bolsa de Couro</h3>
+                <p class="text-gray-600 mb-4">Uma bolsa elegante feita de couro premium, perfeita para o dia a dia.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-2xl font-bold text-green-600">R$ 250,00</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Bolsa de Couro', 250, 'https://placehold.co/100x100')">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <!-- Produto 3 -->
+            <div class="product-card bg-white rounded-lg shadow-md p-6 fade-in">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/757b85f6-bb1a-4356-94f0-051180d6bec5.png" alt="Comfortable wireless headphones with matte black finish, adjustable headband, and illuminated inner padding set against a studio background with blurred cityscape and soft blue lighting" class="w-full h-48 object-cover rounded-t-lg mb-4">
+                <h3 class="text-xl font-semibold mb-2">Fones de Ouvido</h3>
+                <p class="text-gray-600 mb-4">Fones sem fio com cancelamento de ruído e bateria de longa duração.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-2xl font-bold text-green-600">R$ 400,00</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Fones de Ouvido', 400, 'https://placehold.co/100x100')">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <!-- Produto 4 -->
+            <div class="product-card bg-white rounded-lg shadow-md p-6 fade-in">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6c82113f-bce9-47b8-ac22-c0bf1cce88f8.png" alt="Stylish watch with minimalist dial, leather strap, and subtle branding partially visible, positioned on antique wooden surface with vintage book and brass lamp casting warm golden glow" class="w-full h-48 object-cover rounded-t-lg mb-4">
+                <h3 class="text-xl font-semibold mb-2">Relógio Clássico</h3>
+                <p class="text-gray-600 mb-4">Um relógio atemporal com design sofisticado para qualquer ocasião.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-2xl font-bold text-green-600">R$ 800,00</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Relógio Clássico', 800, 'https://placehold.co/100x100')">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <!-- Produto 5 -->
+            <div class="product-card bg-white rounded-lg shadow-md p-6 fade-in">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d77d961b-cd0c-4e90-a10c-0212b72a818b.png" alt="Cozy cashmere sweater in soft gray tones, draped over back of chair with wool texture visible, surrounded by soft natural light filtering through blinds and casting gentle shadows on textured wallpaper" class="w-full h-48 object-cover rounded-t-lg mb-4">
+                <h3 class="text-xl font-semibold mb-2">Suéter de Cashmere</h3>
+                <p class="text-gray-600 mb-4">Uma peça aconchegante e elegante para as noites frias.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-2xl font-bold text-green-600">R$ 350,00</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Suéter de Cashmere', 350, 'https://placehold.co/100x100')">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <!-- Produto 6 -->
+            <div class="product-card bg-white rounded-lg shadow-md p-6 fade-in">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3863a570-f926-47d8-9359-eafc5e3a8b4a.png" alt="Premium leather wallet with RFID protection, multiple compartments, and embossed logo, laid flat on dark velvet surface with coins and business card arranged neatly around it" class="w-full h-48 object-cover rounded-t-lg mb-4">
+                <h3 class="text-xl font-semibold mb-2">Carteira de Couro</h3>
+                <p class="text-gray-600 mb-4">Uma carteira resistente e estilosa com proteção RFID incorporada.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-2xl font-bold text-green-600">R$ 120,00</span>
+                    <button class="btn-add" onclick="adicionarAoCarrinho('Carteira de Couro', 120, 'https://placehold.co/100x100')">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Carrinho Lateral -->
+    <aside class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out" id="cart-sidebar" style="transform: translateX(100%);">
+        <div class="cart-header p-4">
+            <h2 class="text-xl font-bold mb-2">Seu Carrinho</h2>
+            <button class="absolute top-4 right-4 text-white" onclick="fecharCarrinho()">✕</button>
+        </div>
+        <div class="p-4 scrollable-cart" id="cart-items">
+            <!-- Itens do carrinho serão inseridos aqui -->
+        </div>
+        <div class="p-4 border-t">
+            <div class="flex justify-between text-lg font-bold mb-4" id="total-price">Total: R$ 0,00</div>
+            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">Finalizar Compra</button>
+        </div>
+    </aside>
+
+    <!-- Botão para abrir carrinho -->
+    <button class="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors" onclick="abrirCarrinho()">
+        <span class="text-2xl">🛒</span>
+        <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center" id="cart-count">0</span>
+    </button>
+
+    <script>
+        let carrinho = [];
+
+        function carregarCarrinho() {
+            // Carregar carrinho do localStorage usando JSON
+            const carrinhoSalvo = localStorage.getItem('carrinho');
+            if (carrinhoSalvo) {
+                carrinho = JSON.parse(carrinhoSalvo);
+                atualizarCarrinho();
+            }
+        }
+
+        function salvarCarrinho() {
+            // Salvar carrinho no localStorage usando JSON
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+        }
+
+        function adicionarAoCarrinho(nome, preco, imagem) {
+            const itemExistente = carrinho.find(item => item.nome === nome);
+            if (itemExistente) {
+                itemExistente.quantidade++;
+            } else {
+                carrinho.push({ nome, preco, quantidade: 1, imagem });
+            }
+            salvarCarrinho();
+            atualizarCarrinho();
+            animarBotao();
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            salvarCarrinho();
+            atualizarCarrinho();
+        }
+
+        function alterarQuantidade(index, novaQuantidade) {
+            if (novaQuantidade <= 0) {
+                removerDoCarrinho(index);
+                return;
+            }
+            carrinho[index].quantidade = novaQuantidade;
+            salvarCarrinho();
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const cartItems = document.getElementById('cart-items');
+            const totalPrice = document.getElementById('total-price');
+            const cartCount = document.getElementById('cart-count');
+
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            carrinho.forEach((item, index) => {
+                total += item.preco * item.quantidade;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item flex items-center p-2 mb-2 bg-gray-100 rounded';
+                itemDiv.innerHTML = `
+                    <img src="${item.imagem}" alt="Miniatura do produto ${item.nome} com qualidade premium e detalhes nítidos" class="w-12 h-12 rounded mr-3 object-cover">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm">${item.nome}</h4>
+                        <p class="text-green-600 font-semibold">R$ ${(item.preco * item.quantidade).toFixed(2)}</p>
+                    </div>
+                    <input type="number" value="${item.quantidade}" class="quantity-input mr-2" min="1" onchange="alterarQuantidade(${index}, parseInt(this.value))">
+                    <button class="remove-btn text-sm font-bold" onclick="removerDoCarrinho(${index})">Remover</button>
+                `;
+                cartItems.appendChild(itemDiv);
+            });
+
+            totalPrice.textContent = `Total: R$ ${total.toFixed(2)}`;
+            cartCount.textContent = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+        }
+
+        function abrirCarrinho() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.style.transform = 'translateX(0)';
+            atualizarCarrinho(); // Garantir que o carrinho esteja atualizado ao abrir
+        }
+
+        function fecharCarrinho() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.style.transform = 'translateX(100%)';
+        }
+
+        function animarBotao() {
+            const botao = document.querySelector('[onclick="abrirCarrinho()"]');
+            botao.classList.add('animate-pulse');
+            setTimeout(() => botao.classList.remove('animate-pulse'), 300);
+        }
+
+        // Fechar carrinho ao clicar fora
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('cart-sidebar');
+            const button = document.querySelector('[onclick="abrirCarrinho()"]');
+            if (sidebar.style.transform !== 'translateX(100%)' && !sidebar.contains(e.target) && !button.contains(e.target)) {
+                fecharCarrinho();
+            }
+        });
+    </script>
+</body>
 </html>
+</content>
+</create_file>
